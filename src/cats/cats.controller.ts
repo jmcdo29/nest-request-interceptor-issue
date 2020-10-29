@@ -7,7 +7,7 @@ export class CatsController {
 
   constructor(private readonly catsService: CatsService) { }
 
-  @UseInterceptors(RequestInterceptor)
+  // @UseInterceptors(RequestInterceptor)
   @Get()
   async getHello(): Promise<string> {
     return this.catsService.getCats();

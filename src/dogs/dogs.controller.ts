@@ -7,7 +7,7 @@ export class DogsController {
 
   constructor(private readonly dogsService: DogsService) { }
 
-  @UseInterceptors(RequestInterceptor)
+  // @UseInterceptors(RequestInterceptor)
   @Get()
   getHello(): string {
     return this.dogsService.getDogs();

@@ -13,7 +13,7 @@ export class HttpClientProxy extends HttpService {
 
   constructor(
     @Inject(REQUEST) private readonly inboundRequest: Record<string, unknown>,
-    private readonly moduleRef: ModuleRef
+    private readonly moduleRef: ModuleRef,
   ) {
     super()
     constructorCount++
@@ -32,6 +32,7 @@ export class HttpClientProxy extends HttpService {
     url: string,
     config?: AxiosRequestConfig
   ): Observable<AxiosResponse<T>> {
+    console.log('Calling super.get(' + url + ')');
     return super.get(url, config)
   }
 
@@ -43,19 +44,21 @@ export class HttpClientProxy extends HttpService {
     return new Observable<AxiosResponse>(observer => {
       
       const contextId = ContextIdFactory.getByRequest(this.inboundRequest)
-
-      this.moduleRef.resolve(RequestInterceptor, contextId, { strict: false }).then(async (requestInterceptor) => {
-
+      console.log(contextId);
+      const requestInterceptor = this.moduleRef.get(RequestInterceptor, { strict: false })
+        
         console.log(`Instance ${requestInterceptor.getInstanceId()} of RequestInterceptor retrieved`)
         
         const headers = requestInterceptor.getRequestHeaders()
         // ... do something with the headers, e.g mix them into the config 
 
-        const response = await callback['_' + method](...args).toPromise()
+        callback['_' + method](...args).toPromise().then(val => {
+          observer.next(val);
+          observer.complete();
+        })
         
-        observer.next(response)
-        observer.complete()
-      })
+        // observer.next(response)
+        // observer.complete()
 
     })
   }

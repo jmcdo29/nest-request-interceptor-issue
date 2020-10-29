@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 let constructorCount = 0
 
-@Injectable({scope: Scope.REQUEST})
+@Injectable()
 export class RequestInterceptor implements NestInterceptor {
 
   private instanceId: number

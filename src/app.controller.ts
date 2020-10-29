@@ -7,7 +7,7 @@ import { RequestInterceptor } from './request-interceptor/request-interceptor.se
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @UseInterceptors(RequestInterceptor)
+  // @UseInterceptors(RequestInterceptor)
   @Get()
   async getHello(): Promise<string> {
     return this.appService.getHello();
